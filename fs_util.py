@@ -8,6 +8,7 @@ def path_stats(path):
     return {
         "fs_size": fs_stat.f_frsize * fs_stat.f_blocks,
         "fs_avail": fs_stat.f_frsize * fs_stat.f_bavail,
+        "fs_free": fs_stat.f_frsize * fs_stat.f_bfree,
         "fs_files": fs_stat.f_files,
         "fs_files_avail": fs_stat.f_favail,
     }

@@ -36,7 +36,7 @@ def init_rawfile(volume_id, size):
     from util import run
     from consts import RESOURCE_EXHAUSTED_EXIT_CODE
 
-    if rawfile_util.get_capacity() < size:
+    if rawfile_util.get_free_capacity() < size:
         raise CalledProcessError(returncode=RESOURCE_EXHAUSTED_EXIT_CODE, cmd="")
 
     img_dir = rawfile_util.img_dir(volume_id)
@@ -63,6 +63,11 @@ def get_capacity():
     cap = rawfile_util.get_capacity()
     return max(0, cap)
 
+def get_free_capacity():
+    import rawfile_util
+
+    cap = rawfile_util.get_free_capacity()
+    return max(0, cap)
 
 @remote_fn
 def expand_rawfile(volume_id, size):
@@ -75,7 +80,7 @@ def expand_rawfile(volume_id, size):
     size_inc = size - rawfile_util.metadata(volume_id)["size"]
     if size_inc <= 0:
         return
-    if rawfile_util.get_capacity() < size_inc:
+    if rawfile_util.get_free_capacity() < size_inc:
         exit(RESOURCE_EXHAUSTED_EXIT_CODE)
 
     rawfile_util.patch_metadata(

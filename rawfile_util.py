@@ -134,3 +134,13 @@ def get_capacity():
     for volume_stat in get_volumes_stats().values():
         capacity -= volume_stat["total"] - volume_stat["used"]
     return capacity
+
+def get_free_capacity():
+    disk_free_size = path_stats(DATA_DIR)["fs_free"]
+    free_capacity = disk_free_size
+    free_volumes = 0
+    for volume_stat in get_volumes_stats().values():
+        free_volumes += volume_stat["total"] - volume_stat["used"]
+    free_capacity -= free_volumes / 2
+    return free_capacity
+
